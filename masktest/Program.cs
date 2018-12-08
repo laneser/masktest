@@ -47,7 +47,7 @@ namespace masktest
 
             var d3 = DoMask(d, CloneArray(mask2), new Number() { numerator = 1, denominator = 108 });
             Console.WriteLine("after mask2 :");
-            DumpMask(d2);
+            DumpMask(d3);
 
 
             Console.ReadLine();
