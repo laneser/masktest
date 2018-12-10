@@ -16,6 +16,15 @@ namespace masktest
 
         public static double[][] mask2 = new double[][]
         {
+            new double[] {1, 4, 6, 4,1,},
+            new double[] {4,16,24,16,4,},
+            new double[] {6,24,36,24,6,},
+            new double[] {4,16,24,16,4,},
+            new double[] {1, 4, 6, 4,1,},
+        };
+
+        public static double[][] mask4 = new double[][]
+        {
             new double[] {1,2, 4,2,1,},
             new double[] {2,4, 8,4,2,},
             new double[] {4,8,16,8,4,},
@@ -45,12 +54,46 @@ namespace masktest
             Console.WriteLine("after mask1 twice:");
             DumpMask(d2);
 
-            var d3 = DoMask(d, CloneArray(mask2), new Number() { numerator = 1, denominator = 108 });
+            var d3 = DoMask(d, CloneArray(mask2), new Number() { numerator = 1, denominator = 256 });
             Console.WriteLine("after mask2 :");
             DumpMask(d3);
 
+            var newmask = new double[][]
+            {
+                new double[] {0,0,0,0,0},
+                new double[] {0,0,0,0,0},
+                new double[] {0,0,0,0,0},
+                new double[] {0,0,0,0,0},
+                new double[] {0,0,0,0,0},
+            };
 
+            var nd = CloneArray(newmask);
+            for (int x=0;x<=2;x++)
+            {
+                for (int y=0;y<=2;y++)
+                {
+                    AddMask(nd, CloneArray(mask1), x, y);
+                }
+            }
+
+            Console.WriteLine("Calculated mask:");
+            DumpMask(nd);
+            Console.WriteLine("Sum value:" + GetArrayInfos(nd).Select(x => x.value.numerator).Sum());
             Console.ReadLine();
+        }
+
+        static void AddMask(Number[][] data, Number[][] add, int addx, int addy)
+        {
+            foreach (var addv in GetArrayInfos(add))
+            {
+                var datav = new ArrayDataInfo<Number>()
+                {
+                    data = data,
+                    x = addv.x + addx,
+                    y = addv.y + addy,
+                };
+                datav.value = datav.value.Plus(addv.value);
+            }
         }
 
         static void DumpMask(Number[][] data)
